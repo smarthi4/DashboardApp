@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/dashboard.css"  media="screen" runat="server"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script type="text/javascript">
+        var pathToCsv = '@System.Web.Configuration.WebConfigurationManager.AppSettings["pathToCsv"]';
+    </script>
+</head>
+
+
+
+<body onload="populateData(); checkRelQ();">
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <div id="modal-text">
+                <p>Some text in the Modal..</p>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    <div id="velocityDiv" class="list-inline">
+        <h1>VELOCITY</h1>
+        <span>Team</span>
+        <select id="scrumTeamVelocity" class="scrumTeamDropdown">
+            <option value="All">All</option>
+            <option value="onCampus">onCampus</option>
+            <option value="onRecord">onRecord</option>
+            <option value="onMessage">onMessage</option>
+            <option value="onBoard">onBoard</option>
+        </select>
+        <span id="sprintVelocityText"> Sprint Number</span>
+        <select id="sprintVelocity" class="sprintDropdown"></select>
+        <span id="monthVelocityText" hidden>Month</span>
+        <select id="monthVelocity" class="monthDropdown" onchange="updateTranslation()" hidden></select>
+        <span id="monthToSprintTranslation" hidden></span>
+        <button class="addBtn" onclick="displayVelocity()">+</button>
+        <br />
+        <div hidden>
+            <input type="checkbox" id="addMultipleVel" onchange="checkBoxClearAddedVel()">Compare Graphs<t></t>
+            ||
+            <input type="radio" name="viewBy" value="sprint" onclick="switchToSprint()" checked> View By Sprint<t></t>|
+            <input type="radio" name="viewBy" value="month" onclick="switchToMonth()" id="viewByMonthRadio"> View By Month<br>
+        </div>
+
+        <button class="button" onclick="showTeamHistoryVel()"> Show Team's Full History </button>
+        <button class="button" onclick="showTeamRecentHistoryVel()"> Show Team's Recent History </button>
+        <button class="button" onclick="showTimePeriodVel()"> Show Teams for Selected Time Period </button>
+        <button class="button" onclick="clearAddedVel()">Clear </button>
+        <br><br>
+        <div id="velocityVis" class="vis"></div>
+        <hr/>
+        <h3>Timeline of Percentage of Story Points Completed</h3>
+        <p style="color:lightslategray;">Hover over data points for additional info.</p>
+        <div id="opacityDiv">
+            <h4 id ="opacityTitle">Opacity</h4> <br/>
+            <div class="faded"></div>
+            Moving Average <br />
+            <input type="range" id="movingAverageOpacity" min="0.0" max="1.0" step="0.05" value="1.0" onchange="updateOpacity()" /><br />
+            <br /> Graph <br />
+            <input type="range" id="pathOpacity" min="0.0" max="1.0" step="0.05" value="1.0" onchange="updatePathOpacity()" /><br />
+
+        </div>
+
+        <div id="velocityVisGraph" class="vis"></div>
+        
+        <script src="../Scripts/dashboardAccessoryMethods.js"></script>
+        <script src="../Scripts/dashboardVelocity.js"></script>
+        <script src="../Scripts/dashboardGraph.js"></script>
+        <script src="../Scripts/dashboardBacklogs.js"></script>
+        <script src="../Scripts/dashboardReleased.js"></script>
+
+    </div>
+    <hr/>
+    <div id="releaseQualityDiv" class="list-inline">
+        <h2>RELEASE QUALITY</h2>
+        <select id="scrumTeamReleaseQ" class="scrumTeamDropdown">
+            <option value="All">All</option>
+            <option value="onCampus">onCampus</option>
+            <option value="onRecord">onRecord</option>
+            <option value="onMessage">onMessage</option>
+            <option value="onBoard">onBoard</option>
+        </select>
+        <select id="sprintReleaseQ" class="monthDropdown"></select>
+        <button class="addBtn" onclick="displayReleaseQ()"> + </button>
+        <br/>
+        <input type="checkbox" id="addMultipleRelQ" onchange="checkBoxClearAddedRelQ()" hidden>
+        <button class="button" onclick="showTeamHistoryRelQ()"> Show Selected Team's History </button>
+        <button class="button" onclick="showSprintRelQ()"> Show Teams for Selected Sprint </button>
+        <button class="button" onclick="clearAddedRelQ()">Clear Added Graphs </button>
+        <script src="../Scripts/dashboardReleaseQ.js"></script>
+        <div id="releaseQVis" class="vis"></div>
+
+    </div>
+
+    <hr/>
+    <hr/>
+    <div id="releasedDiv" class="list-inline">
+        <h2>RELEASED</h2>
+        <select id="releasedSelect">
+            <option value="All">All</option>
+            <option value="onCampus">onCampus</option>
+            <option value="onRecord">onRecord</option>
+            <option value="onMessage">onMessage</option>
+            <option value="onBoard">onBoard</option>
+        </select> <select id="monthReleased" class="monthDropdown"></select>     <button id="monthReleasedBtn" onclick="updateReleased()" class="addBtn"> + </button>
+        <span id="loadingReleased" class="loadingText" hidden>  Querying JIRA. Please wait... </span>
+        <br />
+        <br />
+        <div class="releasedContainer">
+            <div id="releasedStories" class="releaseText releaseLText"></div>
+            <div id="prevReleasedStories" class="releaseText releaseRText"></div>
+            <div class="loader" id="loaderStories"></div>
+        </div>
+        <div class="releasedContainer">
+            <div id="releasedHotFixes" class="releaseText releaseLText"></div>
+            <div id="prevReleasedHotFixes" class="releaseText releaseRText"></div>
+            <div class="loader" id="loaderHotFixes"></div>
+        </div>
+    </div>
+    <hr/>
+    <div id="backLogMeasure" class="list-inline">
+        <h2>BACKLOGS</h2>
+        <select id="backLogSelect"> 
+            <option value="All">All</option>
+            <option value="onCampus">onCampus</option>
+            <option value="onRecord">onRecord</option>
+            <option value="onMessage">onMessage</option>
+            <option value="onBoard">onBoard</option>
+        </select>     <button id="backLogBtn" onclick="updateBacklog()" class="addBtn"> + </button> 
+        <span id="loading" class = "loadingText" hidden>  Querying JIRA. Please wait... </span>
+        <div id="backlogContainer">
+            <div id="storyPointsInBacklog"></div>
+            <div id="unsizedStoriesDisp"></div>
+            <div class="loader" id="loaderBacklog"></div>
+        </div>
+    </div>
+
+    <hr/>
+
+
+    <div hidden id="storiesAddedDiv" class="list-inline">
+        <h4>STORIES ADDED</h4>
+        <select>
+            <option value="All">All</option>
+            <option value="onCampus">onCampus</option>
+            <option value="onRecord">onRecord</option>
+            <option value="onMessage">onMessage</option>
+            <option value="onBoard">onBoard</option>
+        </select>
+    </div>
+</body>
+
+</html>

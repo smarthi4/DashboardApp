@@ -1,0 +1,214 @@
+.class-inline {
+    display:inline-block;
+    border: 5px solid black;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.domain {
+    stroke-width:2px;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+} 
+
+.button {
+    border: 1px solid darkgray;
+    color:black;
+    background-color:lightgray;
+    border-radius:5px;
+
+}
+
+.button:hover {
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.24), 0 4px 6px 0 rgba(0,0,0,0.19);
+    background-color:darkgray;
+    color:mintcream;
+}
+
+
+.releasedContainer {
+    border-radius:20px;
+    display:inline-block;
+}
+
+
+
+.addBtn {
+    background-color:darkgreen; 
+    padding-left:10px; 
+    padding-right:10px;
+    margin-top:5px; 
+    margin-bottom:5px; 
+    color: white; 
+    font-weight:bold; 
+    font-size:15px;
+    border:  4px solid; 
+    border-bottom-color:darkgreen; 
+    border-radius: 10px;
+}
+
+hr {
+    height:1px;
+    border:none;
+    color:#333;
+    background-color:#333;
+    opacity:0.4;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: rgba(255,255,255,0.85);
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 25%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#monthToSprintTranslation {
+    color:gray;
+    margin-left:6px;
+    font-style:italic;
+}
+
+#opacityDiv {
+    text-align:center;
+    background-color:rgba(0, 0, 0, 0.01);
+    color:rgba(0,0,0,0.85);
+    width:20%;
+    border-radius:10px;
+    border-bottom:4px solid rgba(0, 0, 0, 0.15);
+    border-left:2px solid rgba(0, 0, 0, 0.1);
+    border-top:1px solid rgba(0, 0, 0, 0.09);
+    border-right:4.5px solid rgba(0, 0, 0, 0.057);
+    position:relative;
+}
+
+.loadingText {
+    color:gray;
+    font-style:italic;
+    opacity:0.8;
+    font-size:10px;
+}
+
+.releaseLText {
+    padding-left:25px;
+    padding-right:25px;
+}
+
+.releaseRText {
+    font-weight:bold;
+    padding-left:50px;
+    padding-right:25px;
+}
+
+.loader {
+    border: 5px solid darkgray;
+    border-top: 5px solid black; 
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+    animation: spin 2s linear infinite;
+    margin-top:7px;
+    margin-bottom:7px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#backlogContainer {
+    border: 3px solid lightgray;
+    width:45%;
+    border-radius:20px;
+}
+html, body, strong{
+    font-family:Helvetica Neue, sans-serif;
+}
+
+#opacityTitle {
+    font-weight:700;
+    float:left;
+    padding:10px;
+    color:rgba(0,0,0,0.6);
+}
+
+.faded {
+    margin: 25px 0;
+    height: 1px;
+    background: black;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(0%, darkgray))
+}
+
+.downarrow {
+    display:inline-block;
+    -webkit-transform: rotate(-180deg);
+}
+.uparrow {
+}
